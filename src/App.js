@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { fetchWorkflowRuns } from './services/githubApi';
+import React, { useState } from 'react';
+// Using mock data instead of API - see src/data/mockWorkflows.js
+import mockWorkflows from './data/mockWorkflows';
 import {
     calculatePassRate,
     getPassFailStatus,
@@ -10,54 +11,28 @@ import SummaryCards from './components/SummaryCards';
 import Filters from './components/Filters';
 import WorkflowTable from './components/WorkflowTable';
 
-// Main App component for the CI Dashboard
-// Handles data fetching, state management, and layout
+// =============================================================================
+// Main App Component - CI Dashboard
+// =============================================================================
+// This dashboard uses mock data for demonstration purposes.
+// All data comes from src/data/mockWorkflows.js - no API calls.
+// 
+// To switch back to real API:
+// 1. Import fetchWorkflowRuns from './services/githubApi'
+// 2. Add useEffect to fetch data on mount
+// 3. Add loading/error states
+// =============================================================================
 
 function App() {
-    // workflow data from the API
-    const [workflows, setWorkflows] = useState([]);
+    // Workflow data from mock file (no API loading needed)
+    const [workflows] = useState(mockWorkflows);
 
-    // loading and error states
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    // filter states
+    // Filter states
     const [searchText, setSearchText] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [branchFilter, setBranchFilter] = useState('all');
 
-    // fetch workflow data from GitHub API
-    const loadWorkflows = useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            const data = await fetchWorkflowRuns();
-            setWorkflows(data);
-        } catch (err) {
-            setError('Failed to load workflow data. Please try again.');
-            console.error('Error loading workflows:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    // load data on initial mount
-    useEffect(() => {
-        loadWorkflows();
-    }, [loadWorkflows]);
-
-    // set up auto-refresh every 60 seconds
-    useEffect(() => {
-        const refreshInterval = setInterval(() => {
-            loadWorkflows();
-        }, 60000);
-
-        // clean up interval on unmount
-        return () => clearInterval(refreshInterval);
-    }, [loadWorkflows]);
-
-    // apply filters to get the displayed workflows
+    // Apply filters to get displayed workflows
     const filteredWorkflows = filterWorkflows(
         workflows,
         searchText,
@@ -65,7 +40,7 @@ function App() {
         branchFilter
     );
 
-    // calculate summary statistics
+    // Calculate summary statistics
     const totalWorkflows = filteredWorkflows.length;
     const totalPass = filteredWorkflows.filter(
         w => getPassFailStatus(w.conclusion) === 'pass'
@@ -75,12 +50,14 @@ function App() {
     ).length;
     const passRate = calculatePassRate(filteredWorkflows);
 
-    // get unique branches for the filter dropdown
+    // Get unique branches for filter dropdown
     const branches = getUniqueBranches(workflows);
 
-    // handle refresh button click
+    // Refresh handler (resets filters in mock mode)
     function handleRefresh() {
-        loadWorkflows();
+        setSearchText('');
+        setStatusFilter('all');
+        setBranchFilter('all');
     }
 
     return (
@@ -94,22 +71,12 @@ function App() {
                     </h1>
                     <p className="header-subtitle">
                         Monitor GitHub Actions workflow runs for urunc.
+                        <span style={{ opacity: 0.7, marginLeft: '8px' }}>(Demo Mode)</span>
                     </p>
                 </div>
             </header>
 
             <main className="main-content">
-                {/* Error message display */}
-                {error && (
-                    <div className="error-banner">
-                        <span className="error-icon">⚠️</span>
-                        <span className="error-message">{error}</span>
-                        <button className="error-retry" onClick={handleRefresh}>
-                            Retry
-                        </button>
-                    </div>
-                )}
-
                 {/* Summary statistics cards */}
                 <SummaryCards
                     totalWorkflows={totalWorkflows}
@@ -128,24 +95,16 @@ function App() {
                     onBranchChange={setBranchFilter}
                     branches={branches}
                     onRefresh={handleRefresh}
-                    isLoading={isLoading}
+                    isLoading={false}
                 />
 
-                {/* Loading state */}
-                {isLoading && workflows.length === 0 ? (
-                    <div className="loading-state">
-                        <div className="loading-spinner"></div>
-                        <div className="loading-text">Loading workflows...</div>
-                    </div>
-                ) : (
-                    /* Workflow table */
-                    <WorkflowTable workflows={filteredWorkflows} />
-                )}
+                {/* Workflow table */}
+                <WorkflowTable workflows={filteredWorkflows} />
             </main>
 
             {/* Dashboard footer */}
             <footer className="footer">
-                <p>Data from GitHub Actions API • Auto-refreshes every 60 seconds</p>
+                <p>Demo Mode • Using mock data for demonstration</p>
             </footer>
         </div>
     );

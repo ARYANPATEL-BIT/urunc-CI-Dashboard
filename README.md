@@ -26,24 +26,55 @@ A professional CI Dashboard proof of concept built with React, plain JavaScript,
 
 ## Setup Instructions
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd ci-dashboard
-   ```
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd ci-dashboard
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### 2. Install dependencies
+```bash
+npm install
+```
 
-3. **Start the development server**
-   ```bash
-   npm start
-   ```
+### 3. Configure GitHub Token
 
-4. **Open in browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+Create a `.env` file in the project root:
+
+```bash
+cp .env.example .env
+```
+
+Then add your GitHub Personal Access Token:
+
+```env
+REACT_APP_GITHUB_TOKEN=ghp_your_token_here
+```
+
+**How to create a GitHub token:**
+1. Go to [GitHub Settings → Tokens](https://github.com/settings/tokens)
+2. Click "Generate new token (classic)"
+3. Select the `repo` scope
+4. Copy the token and paste it in your `.env` file
+
+### 4. Start the development server
+```bash
+npm start
+```
+
+### 5. Open in browser
+Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Vercel Deployment
+
+To deploy to Vercel with the GitHub token:
+
+1. Go to your Vercel project settings
+2. Navigate to **Settings → Environment Variables**
+3. Add a new variable:
+   - **Name**: `REACT_APP_GITHUB_TOKEN`
+   - **Value**: Your GitHub Personal Access Token
+4. Redeploy your application
 
 ## Project Structure
 
