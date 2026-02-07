@@ -24,3 +24,5 @@ Thumbs.db
 # Editor directories
 .idea
 .vscode
+
+.env.example
