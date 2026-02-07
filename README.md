@@ -74,7 +74,7 @@ ci-dashboard/
 
 This dashboard uses the GitHub Actions API to fetch workflow runs:
 
-**Endpoint**: `https://api.github.com/repos/urunc-dev/urunc/actions/runs`
+**Endpoint**: Using github action api of ununc.
 
 The API returns workflow run data including:
 - Workflow name
@@ -85,7 +85,8 @@ The API returns workflow run data including:
 
 ## Screenshots
 
-*Add screenshots here after running the application*
+<img width="1267" height="704" alt="image" src="https://github.com/user-attachments/assets/a89e59a0-3764-422a-a62d-1f9d80d572ab" />
+
 
 ## License
 
