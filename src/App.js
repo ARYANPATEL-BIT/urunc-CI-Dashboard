@@ -11,17 +11,6 @@ import SummaryCards from './components/SummaryCards';
 import Filters from './components/Filters';
 import WorkflowTable from './components/WorkflowTable';
 
-// =============================================================================
-// Main App Component - CI Dashboard
-// =============================================================================
-// This dashboard uses mock data for demonstration purposes.
-// All data comes from src/data/mockWorkflows.js - no API calls.
-// 
-// To switch back to real API:
-// 1. Import fetchWorkflowRuns from './services/githubApi'
-// 2. Add useEffect to fetch data on mount
-// 3. Add loading/error states
-// =============================================================================
 
 function App() {
     // Workflow data from mock file (no API loading needed)
@@ -70,8 +59,8 @@ function App() {
                         CI Dashboard
                     </h1>
                     <p className="header-subtitle">
-                        Monitor GitHub Actions workflow runs for urunc.
-                        <span style={{ opacity: 0.7, marginLeft: '8px' }}>(Demo Mode)</span>
+                        GitHub Actions workflow runs for <strong>urunc</strong>.
+                        <span style={{ opacity: 0.7, marginLeft: '8px' }}></span>
                     </p>
                 </div>
             </header>
